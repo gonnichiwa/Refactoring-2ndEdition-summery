@@ -70,7 +70,7 @@ for(let perf of invoice.performances){
 - 임시 변수들때문에 로컬 범위에 존재하는 이름이 늘어나서 추출 작업이 복잡해짐.
 - 이런 종류의 리팩터링은 `7장 임시 변수를 질의 함수로 바꾸기` 가 있음.
 
-### 임시변수화된 thisAmount의 인라인 처리
+### 임시변수화된 thisAmount의 인라인 처리 `79659b9` (24-04-30)
 
 ```js
 for(let perf of invoice.performances){
