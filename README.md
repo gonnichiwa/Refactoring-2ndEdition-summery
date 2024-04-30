@@ -18,3 +18,8 @@ Chapter 디렉토리 내 요약 markdown file과 실행 코드를 넣음
   - 리팩토링의 과정상 커밋이 추가될것이므로 `git` `branch`와 `tag`로 구분함.
   - `Branch` : Chapter별로 나눈 브랜치, 리팩토링 진행상의 커밋은 해당 Branch에서 진행함.
   - `tag` : Chapter별 가장 최근 커밋을 표시함 (Chapter01, 02, ...)
+
+### 실행 환경
+
++ `Javascript`
+  - nodejs v20.11.1
