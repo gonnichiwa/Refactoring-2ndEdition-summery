@@ -88,3 +88,9 @@ for(let perf of invoice.performances){
     }
 ```
 - `thisAmount`도 임시변수화 되었으니 인라인 처리한다.
+
+
+### 적립 포인트 계산 코드 추출하기
+
+- 앞서 분리한 `amountFor(perf)`와 같은 방법으로 함수 추출
+
