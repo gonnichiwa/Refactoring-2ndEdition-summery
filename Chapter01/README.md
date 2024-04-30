@@ -93,3 +93,28 @@ for(let perf of invoice.performances){
 ### 적립 포인트 계산 코드 추출하기 `f02aef8` (24-04-30)
 - 앞서 분리한 `amountFor(perf)`와 같은 방법으로 함수 추출
 
+
+### format 변수 제거하기
+
+```js
+const format = new Intl.NumberFormat("en-US",
+                        {style: "currency", currency: "USD",
+                        minimumFractionDigits: 2}).format;
+
+for(let perf of invoice.performances){
+    volumeCredits += volumeCreditsFor(perf);
+
+    // 청구 내역을 출력
+    result += `${playFor(perf).name}: ${format(amountFor(perf)/100)} (${perf.audience}석)\n`;
+    totalAmount += amountFor(perf);
+}
+```
+
+- 임시변수는 문제를 일으킬 수 있다.
+- 임시변수는 자신이 속한 루틴에서만 의미가 있어서 루틴이 길고 복잡해질 수 있음.
+- 함수로 분리했으나 `format` 이름을 그대로 놔두기엔 좀 애매함.
+- `format`이라는 이름은 함수가 하는 일을 충분히 설명하지 못하므로.
+- `format`을 `usd`로 이름 바꾸고 `${format(amountFor(perf)/100)}` 같이 계산 결과값을 변경하는 로직또한 추출한 함수 내에서 계산하도록 함
+
+
+
