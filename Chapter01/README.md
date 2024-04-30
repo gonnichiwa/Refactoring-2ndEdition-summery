@@ -176,3 +176,7 @@ result += `적립 포인트 : ${totalVolumeCredit(invoice)}점 \n`;
 
 인라인 처리함.
 
+### totalAmount 변수 제거
+
+- 바로 위 언급한 `totalVolumeCredit()` 과 같은 절차로 제거함.
+
