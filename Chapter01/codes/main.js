@@ -26,14 +26,17 @@ plays = {
 
 // 공연료 청구서를 출력
 function statement(invoice, plays) {
-    const statementData = {};
-    statementData.customer = invoice.customer;
-    statementData.performances = invoice.performances.map(enrichPerformance);
-    statementData.totalVolumeCredit = totalVolumeCredit(statementData);
-    statementData.totalAmount = totalAmount(statementData);
-    return renderPlainText(statementData);
+    return renderPlainText(createStatementData(invoice, plays));
 
     ///////
+    function createStatementData(invoice, plays){
+        const statementData = {};
+        statementData.customer = invoice.customer;
+        statementData.performances = invoice.performances.map(enrichPerformance);
+        statementData.totalVolumeCredit = totalVolumeCredit(statementData);
+        statementData.totalAmount = totalAmount(statementData);
+        return statementData;
+    }
 
     function enrichPerformance(aPerformance){
         const result = Object.assign({}, aPerformance);
