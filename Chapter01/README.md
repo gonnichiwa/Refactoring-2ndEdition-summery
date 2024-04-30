@@ -118,3 +118,61 @@ for(let perf of invoice.performances){
 
 
 
+### volumeCredits 변수 제거
+
+```js
+let volumeCredits = 0;
+...
+...
+for(let perf of invoice.performances){
+    volumeCredits += volumeCreditsFor(perf);
+
+    // 청구 내역을 출력
+    result += `${playFor(perf).name}: ${usd(amountFor(perf))} (${perf.audience}석)\n`;
+    totalAmount += amountFor(perf);
+}
+```
+
+1. for 안에 있는 변수 `volumeCredits` 는 반복문 안에서 누적되는 값이므로 까다롭다.
+2. 반복문 쪼개기(Chapter8)로 VolumeCredits 누적되는 부분을 따로 빼냄
+3. 이후 `let volumeCredits = 0;` 으로 초기화 한 라인을 반복문 쪼갠 코드 앞으로 슬라이드하고 보면 인라인 처리하기 수월 해 보임.
+- 아래 코드는 위 `1.` ~ `3.` 을 진행한 코드임.
+
+```js
+for(let perf of invoice.performances){
+        // 청구 내역을 출력
+        result += `${playFor(perf).name}: ${usd(amountFor(perf))} (${perf.audience}석)\n`;
+        totalAmount += amountFor(perf);
+}
+
+let volumeCredits = 0;
+for(let perf of invoice.performances){
+    volumeCredits += volumeCreditsFor(perf);
+}
+```
+
+에서
+
+```js
+let volumeCredits = totalVolumeCredit(invoice);
+result += `적립 포인트 : ${volumeCredits}점 \n`;
+
+...
+
+function totalVolumeCredit(invoice) {
+    let result = 0;
+    for (let perf of invoice.performances) {
+        result += volumeCreditsFor(perf);
+    }
+    return result;
+}
+```
+
+위처럼 함수 추출 한 뒤
+
+```js
+result += `적립 포인트 : ${totalVolumeCredit(invoice)}점 \n`;
+```
+
+인라인 처리함.
+
