@@ -2,8 +2,8 @@
 
 ## 작성목적
 
-- 코드 작성의 바이블로 통하는 Reafactoring의 2판을 summery 하여 차후 강의 & proj 진행에 참고하기 위함
-- 진행 중 떠오른 키워드에 대한 부가 설명을 찾기 용이하도록 함
+Reafactoring의 2판을 summery 하여  
+레거시의 리팩토링 연습 재료로 삼음
 
 ## how to use
 
