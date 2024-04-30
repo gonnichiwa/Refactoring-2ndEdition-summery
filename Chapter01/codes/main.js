@@ -25,19 +25,28 @@ plays = {
 };
 
 // 공연료 청구서를 출력
-function statement(invoice) {
-    let result = `청구 내역 (고객명: ${invoice.customer})\n`;
-    for(let perf of invoice.performances){
-        result += `${playFor(perf).name}: ${usd(amountFor(perf))} (${perf.audience}석)\n`;
-    }
-    result += `총액: ${usd(totalAmount(invoice))}\n`;
-    result += `적립 포인트 : ${totalVolumeCredit(invoice)}점 \n`;
-    return result;
+function statement(invoice, plays) {
+    const statementData = {};
+    statementData.customer = invoice.customer;
+    statementData.performances = invoice.performances;
+
+    return renderPlainText(statementData, plays);
+
     ///////
 
-    function totalAmount(invoice){
+    function renderPlainText(data, plays) {
+        let result = `청구 내역 (고객명: ${data.customer})\n`;
+        for (let perf of data.performances) {
+            result += `${playFor(perf).name}: ${usd(amountFor(perf))} (${perf.audience}석)\n`;
+        }
+        result += `총액: ${usd(totalAmount(data))}\n`;
+        result += `적립 포인트 : ${totalVolumeCredit(data)}점 \n`;
+        return result;
+    }
+
+    function totalAmount(data){
         let result = 0;
-        for(let perf of invoice.performances){
+        for(let perf of data.performances){
             result += amountFor(perf);
         }
         return result;
@@ -49,9 +58,9 @@ function statement(invoice) {
                             minimumFractionDigits: 2 }).format(aNumber / 100);
     }
 
-    function totalVolumeCredit(invoice) {
+    function totalVolumeCredit(data) {
         let result = 0;
-        for (let perf of invoice.performances) {
+        for (let perf of data.performances) {
             result += volumeCreditsFor(perf);
         }
         return result;

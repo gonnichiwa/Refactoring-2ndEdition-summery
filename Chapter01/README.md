@@ -218,3 +218,27 @@ function statement(invoice) {
 + 이제 statement()의 HTML 버전 만들려면..
   - 일곱줄짜리 최상단 코드만 HTML로 표현되도록 바꾸면 됨.
 
+
+### 중간정보 처리자 statementData 생성
+
+```js
+function statement(invoice, plays) {
+    const statementData = {};
+    statementData.customer = invoice.customer;
+    statementData.performances = invoice.performances;
+
+    return renderPlainText(statementData, plays);
+
+    function renderPlainText(data, plays) {
+        let result = `청구 내역 (고객명: ${data.customer})\n`;
+        for (let perf of data.performances) {
+            result += `${playFor(perf).name}: ${usd(amountFor(perf))} (${perf.audience}석)\n`;
+        }
+        result += `총액: ${usd(totalAmount(data))}\n`;
+        result += `적립 포인트 : ${totalVolumeCredit(data)}점 \n`;
+        return result;
+    }
+    ...
+    ...
+```
+- `statementData` 를 추가해서 이를 중간에서 데이터 전달하는 역할로 수행하도록 함.
