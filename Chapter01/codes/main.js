@@ -78,20 +78,14 @@ function statement(invoice, plays) {
         return result;
     }
 
-    function totalVolumeCredit(data) {
-        let result = 0;
-        for (let perf of data.performances) {
-            result += perf.volumeCredits;
-        }
-        return result;
+    function totalVolumeCredit(data){
+        return data.performances
+            .reduce((total, p) => total + p.volumeCredits, 0); // 반복문을 파이프라인으로 바꾸기.
     }
 
     function totalAmount(data){
-        let result = 0;
-        for(let perf of data.performances){
-            result += perf.amount;
-        }
-        return result;
+        return data.performances
+            .reduce((total, p) => total + p.amount, 0); // 반복문을 파이프라인으로 바꾸기.
     }
 
     function renderPlainText(data) {
