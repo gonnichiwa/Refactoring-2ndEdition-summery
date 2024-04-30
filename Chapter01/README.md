@@ -219,7 +219,7 @@ function statement(invoice) {
   - 일곱줄짜리 최상단 코드만 HTML로 표현되도록 바꾸면 됨.
 
 
-### 중간정보 처리자 statementData 생성
+### 중간정보 처리자 statementData 생성 `370d4ff` (24-04-30)
 
 ```js
 function statement(invoice, plays) {
