@@ -94,7 +94,7 @@ for(let perf of invoice.performances){
 - 앞서 분리한 `amountFor(perf)`와 같은 방법으로 함수 추출
 
 
-### format 변수 제거하기
+### format 변수 제거하기 `f7763d0` (24-04-30)
 
 ```js
 const format = new Intl.NumberFormat("en-US",
