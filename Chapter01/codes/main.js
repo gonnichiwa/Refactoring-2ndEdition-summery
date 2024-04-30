@@ -27,16 +27,14 @@ plays = {
 // 공연료 청구서를 출력
 function statement(invoice) {
     let result = `청구 내역 (고객명: ${invoice.customer})\n`;
-    
     for(let perf of invoice.performances){
-        // 청구 내역을 출력
         result += `${playFor(perf).name}: ${usd(amountFor(perf))} (${perf.audience}석)\n`;
     }
     result += `총액: ${usd(totalAmount(invoice))}\n`;
     result += `적립 포인트 : ${totalVolumeCredit(invoice)}점 \n`;
     return result;
     ///////
-    
+
     function totalAmount(invoice){
         let result = 0;
         for(let perf of invoice.performances){

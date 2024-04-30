@@ -21,6 +21,19 @@
 
 > 리팩터링 하기전에 제대로 된 테스트부터 마련한다. 테스트는 반드시 자가진단(유닛테스트, 통합테스트) 하도록 만듬.
 
+> 요구사항은 한두개씩 들어오지 않는다, 한부대 단위로 들어온다.
+
+- HTML로 출력하도록 요구사항이 들어와서 본 코드를 고칠려고 하면 너무 힘들다.
+
++ 복잡한 로직의 작업에 앞서 해야 할 것은
+  1. 레거시의 테스트 환경을 갖추고
+  2. 테스트에 맞게 입력과 출력의 정합성을 확인한 다음
+  3. 함수를 쪼개고
+  4. 쪼개는 작업 단위마다 테스트를 돌림  
+- 아래 내용들은 위 `1.`, `2.` 완수 되었다는 가정 하 진행함.
+- 사실 간단한 코드라서 그냥 콘솔에서 돌려도 무방하기 때문에 위 `1.`, `2.`는 완수 되었다고 봐도 무방함.
+
+
 ### statement() 함수 쪼개기 `c744fd8` (24-04-30)
 
 - 전체 동작을 각각의 부분으로 나눌 수 있는 지점을 찾음.
@@ -180,4 +193,24 @@ result += `적립 포인트 : ${totalVolumeCredit(invoice)}점 \n`;
 ### totalAmount 변수 제거 `ae70eb2` (24-04-30)
 
 - 바로 위 언급한 `totalVolumeCredit()` 과 같은 절차로 제거함.
+
+<br/>
+
+### 여기까지 한 뒤 statement() 보면..
+
+```js
+function statement(invoice) {
+    let result = `청구 내역 (고객명: ${invoice.customer})\n`;
+    for(let perf of invoice.performances){
+        result += `${playFor(perf).name}: ${usd(amountFor(perf))} (${perf.audience}석)\n`;
+    }
+    result += `총액: ${usd(totalAmount(invoice))}\n`;
+    result += `적립 포인트 : ${totalVolumeCredit(invoice)}점 \n`;
+    return result;
+
+    ... 이후 함수 분리한것들..
+```
+
+- 여기까지 리팩토링의 초기단계.
+- 이제 statement()의 HTML 버전 만들려면..
 
