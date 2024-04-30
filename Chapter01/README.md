@@ -70,3 +70,21 @@ for(let perf of invoice.performances){
 - 임시 변수들때문에 로컬 범위에 존재하는 이름이 늘어나서 추출 작업이 복잡해짐.
 - 이런 종류의 리팩터링은 `7장 임시 변수를 질의 함수로 바꾸기` 가 있음.
 
+### 임시변수화된 thisAmount의 인라인 처리
+
+```js
+for(let perf of invoice.performances){
+        // 공연 type별 요금계산
+        let thisAmount = amountFor(perf);
+
+        // 포인트 적립
+        volumeCredits += Math.max(perf.audience - 30, 0);
+        // 희극 관객 5명 마다 추가 포인트를 제공한다.
+        if("comedy" === playFor(perf).type) volumeCredits += Math.floor(perf.audience / 5);
+
+        // 청구 내역을 출력
+        result += `${playFor(perf).name}: ${format(thisAmount/100)} (${perf.audience}석)\n`;
+        totalAmount += thisAmount;
+    }
+```
+- `thisAmount`도 임시변수화 되었으니 인라인 처리한다.
