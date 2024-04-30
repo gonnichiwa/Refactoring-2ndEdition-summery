@@ -25,7 +25,7 @@ plays = {
 };
 
 // 공연료 청구서를 출력
-function statement(invoice, plays){
+function statement(invoice, plays) {
     let totalAmount = 0;
     let volumeCredits = 0;
     let result = `청구 내역 (고객명: ${invoice.customer})\n`;
@@ -35,25 +35,8 @@ function statement(invoice, plays){
     
     for(let perf of invoice.performances){
         const play = plays[perf.playID];
-        let thisAmount = 0;
-
-        switch(play.type){
-            case "tragedy":
-                thisAmount = 40000;
-                if(perf.audience > 30){
-                    thisAmount += 1000 * (perf.audience - 30);
-                }
-            break;
-            case "comedy":
-                thisAmount = 30000;
-                if(perf.audience > 20) {
-                    thisAmount += 10000 + 500 * (perf.audience - 20);
-                }
-                thisAmount += 300 * perf.audience;
-                break;
-            default:
-                throw new Error(`알 수 없는 장르: ${play.type}`);
-        }
+        // 공연 type별 요금계산
+        let thisAmount = amountFor(play, perf);
 
         // 포인트 적립
         volumeCredits += Math.max(perf.audience - 30, 0);
@@ -69,12 +52,35 @@ function statement(invoice, plays){
     return result;
 }
 
+function amountFor(play, aPerformance) {
+    let result = 0; // 명확한 이름으로 변경 : 함수의 결과값 변수 이름은 result
+    switch (play.type) {
+        case "tragedy":
+            result = 40000;
+            if (aPerformance.audience > 30) {
+                result += 1000 * (aPerformance.audience - 30);
+            }
+            break;
+        case "comedy":
+            result = 30000; // 기본료
+            if (aPerformance.audience > 20) { // 20명까진 기본이용
+                result += 10000 + 500 * (aPerformance.audience - 20); // 추가인원
+            }
+            result += 300 * aPerformance.audience; // comedy 특별추가요금
+            break;
+        default:
+            throw new Error(`알 수 없는 장르: ${play.type}`);
+    }
+    return result;
+}
+
 result = statement(invoice, plays);
 console.log(result);
-```result
-청구 내역 (고객명: BigCo)
-Hamlet: $650.00 (55석)
-as-like: $580.00 (35석)
-athello: $500.00 (40석)
-총액: $1,730.00적립 포인트 : 47점
-```
+// result
+// 청구 내역 (고객명: BigCo)
+// Hamlet: $650.00 (55석)
+// as-like: $580.00 (35석)
+// athello: $500.00 (40석)
+// 총액: $1,730.00적립 포인트 : 47점
+
+
