@@ -354,7 +354,7 @@ class PerformanceCaculator {
 }
 ```
 
-- 새로 생성한 `PerformanceCaculator`에 amountFor를 넣는다
+### 새로 생성한 `PerformanceCaculator`에 amountFor를 넣는다 `d101943` (24-05-01)
 
 ```js
 class PerformanceCaculator {
@@ -399,4 +399,5 @@ function amountFor(aPerformance) {
 
 - 컴파일, 테스트, 커밋
 
-- 적립 포인트 계산하는 함수도 같은 절차대로 `PerformanceCaculator` 객체로 뺀다
+### 적립 포인트 계산하는 함수도 같은 절차대로 `PerformanceCaculator` 객체로 뺀다
+
