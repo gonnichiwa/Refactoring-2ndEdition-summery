@@ -399,5 +399,11 @@ function amountFor(aPerformance) {
 
 - 컴파일, 테스트, 커밋
 
-### 적립 포인트 계산하는 함수도 같은 절차대로 `PerformanceCaculator` 객체로 뺀다
 
+### 적립 포인트 계산하는 함수도 같은 절차대로 `PerformanceCaculator` 객체로 뺀다 `16c0ec3` (24-05-01)
+
+- 잘 작동되면 코드 정리
+
+- 
+
+### 공연료 계산기를 다형성 버전으로 만들기

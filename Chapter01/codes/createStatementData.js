@@ -47,23 +47,14 @@ export default function createStatementData(invoice, plays){
         const caculator = new PerformanceCaculator(aPerformance, playFor(aPerformance));
         const result = Object.assign({}, aPerformance);
         result.play = playFor(result);
-        result.amount = amountFor(result);
-        result.volumeCredits = volumeCreditsFor(result);
+        result.amount = caculator.amount;
+        result.volumeCredits = caculator.volumeCredits;
         return result;
     }
     
     // 공연(performance) 제목(playID) 에 해당하는 공연정보(play) 를 가져옴
     function playFor(aPerformance){
         return plays[aPerformance.playID];
-    }
-    
-    // 공연 type별 요금계산
-    function amountFor(aPerformance) {
-        return new PerformanceCaculator(aPerformance, playFor(aPerformance)).amount;
-    }
-    
-    function volumeCreditsFor(aPerformance) {
-        return new PerformanceCaculator(aPerformance, playFor(aPerformance)).volumeCredits;
     }
     
     function totalVolumeCredit(data){
