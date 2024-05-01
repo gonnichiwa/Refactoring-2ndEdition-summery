@@ -26,10 +26,11 @@ const plays = {
     "athello" : {"name" : "athello", "type": "tragedy"},
 };
 
+
 // 공연료 청구서를 출력
 function statement(invoice, plays) {
-    return renderHTML(createStatementData(invoice, plays));
-    // return renderPlainText(createStatementData(invoice, plays));
+    // return renderHTML(createStatementData(invoice, plays));
+    return renderPlainText(createStatementData(invoice, plays));
     
     function renderPlainText(data) {
         let result = `청구 내역 (고객명: ${data.customer})\n`;

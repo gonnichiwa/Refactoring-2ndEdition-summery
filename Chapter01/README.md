@@ -256,3 +256,78 @@ function statement(invoice, plays) {
 > `간결함`이 `지혜의 정수` 일지는 몰라도  
 > `명료함`이 `진화할 수 있는 프로그램`의 정수임.
 
+
+### 다형성을 활용해 계산 코드 재구성 하기
+
+```js
+function amountFor(aPerformance) {
+        let result = 0; // 명확한 이름으로 변경 : 함수의 결과값 변수 이름은 result
+        switch (aPerformance.play.type) {
+            case "tragedy":
+                result = 40000;
+                if (aPerformance.audience > 30) {
+                    result += 1000 * (aPerformance.audience - 30);
+                }
+                break;
+            case "comedy":
+                result = 30000; // 기본료
+                if (aPerformance.audience > 20) { // 20명까진 기본이용
+                    result += 10000 + 500 * (aPerformance.audience - 20); // 추가인원
+                }
+                result += 300 * aPerformance.audience; // comedy 특별추가요금
+                break;
+            default:
+                throw new Error(`알 수 없는 장르: ${aPerformance.play.type}`);
+        }
+        return result;
+    }
+```
+
+- `amountFor(aPerformance)`를 보면, 연극 장르(`aPerformance.play.type`) 마다 공연료와 적립포인트 계산을 다르게 지정하도록 함
+
+- 조건문 (if, switch)를 명확한 구조로 보완하는 방법은 다양하나, 여기서는 `다형성`을 활용하는것이 자연스러워 보인다.
+
++ 작업목표 : 
+  - 상속 계층을 구성해서 `희극(comedy)` 과 `비극(tragedy)` 서브클래스가 각자의 구체적인 계산 로직을 정의함.
+  - 그래서 `희극`과 `비극` 서브클래스에 따라 정확한 계산 로직을 연결함. (언어 차원에서 처리)
+  - 적립포인트 계산도 비슷한 구조로 만들것임.
+
+- `createStatementData.js` 의 코드가 리팩터링 대상.
+
+### 공연료 계산기 만들기
+
+```js
+// createStatementData.js
+class PerformanceCaculator {
+    constructor(aPerformance){
+        this.performance = aPerformance;
+    }
+}
+```
+
+```js
+function enrichPerformance(aPerformance){
+    const caculator = new PerformanceCaculator(aPerformance);
+    const result = Object.assign({}, aPerformance);
+    result.play = playFor(result);
+    result.amount = amountFor(result);
+    result.volumeCredits = volumeCreditsFor(result);
+    return result;
+}
+```
+
+- 컴파일, 빌드, 테스트.
+
+```shell
+$ node main.js
+청구 내역 (고객명: BigCo)
+Hamlet: $650.00 (55석)
+as-like: $580.00 (35석)
+athello: $500.00 (40석)
+총액: $1,730.00
+적립 포인트 : 47점
+```
+
+- 그리고 공연 정보를 계산기로 전달.
+
+
