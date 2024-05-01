@@ -257,7 +257,7 @@ function statement(invoice, plays) {
 > `명료함`이 `진화할 수 있는 프로그램`의 정수임.
 
 
-### 다형성을 활용해 계산 코드 재구성 하기
+### 다형성을 활용해 계산 코드 재구성 하기 `4d6e0dd` (24-05-01)
 
 ```js
 function amountFor(aPerformance) {
@@ -294,6 +294,7 @@ function amountFor(aPerformance) {
 
 - `createStatementData.js` 의 코드가 리팩터링 대상.
 
+
 ### 공연료 계산기 만들기
 
 ```js
@@ -329,5 +330,28 @@ athello: $500.00 (40석)
 ```
 
 - 그리고 공연 정보를 계산기로 전달.
+
+```js
+// createStatementData.js
+    function enrichPerformance(aPerformance){
+        const caculator = new PerformanceCaculator(aPerformance, playFor(aPerformance));
+        const result = Object.assign({}, aPerformance);
+        result.play = playFor(result);
+        result.amount = amountFor(result);
+        result.volumeCredits = volumeCreditsFor(result);
+        return result;
+    }
+```
+
+
+```js
+// createStatementData.js
+class PerformanceCaculator {
+    constructor(aPerformance, aPlay){
+        this.performance = aPerformance;
+        this.aPlay = aPlay;
+    }
+}
+```
 
 
