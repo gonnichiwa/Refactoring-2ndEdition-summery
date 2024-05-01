@@ -329,18 +329,18 @@ athello: $500.00 (40석)
 적립 포인트 : 47점
 ```
 
-- 그리고 공연 정보를 계산기로 전달.
+### 그리고 공연 정보를 계산기로 전달. `a157474` (24-05-01)
 
 ```js
 // createStatementData.js
-    function enrichPerformance(aPerformance){
-        const caculator = new PerformanceCaculator(aPerformance, playFor(aPerformance));
-        const result = Object.assign({}, aPerformance);
-        result.play = playFor(result);
-        result.amount = amountFor(result);
-        result.volumeCredits = volumeCreditsFor(result);
-        return result;
-    }
+function enrichPerformance(aPerformance){
+    const caculator = new PerformanceCaculator(aPerformance, playFor(aPerformance));
+    const result = Object.assign({}, aPerformance);
+    result.play = playFor(result);
+    result.amount = amountFor(result);
+    result.volumeCredits = volumeCreditsFor(result);
+    return result;
+}
 ```
 
 
@@ -354,4 +354,49 @@ class PerformanceCaculator {
 }
 ```
 
+- 새로 생성한 `PerformanceCaculator`에 amountFor를 넣는다
 
+```js
+class PerformanceCaculator {
+    constructor(aPerformance, aPlay){
+        this.performance = aPerformance;
+        this.play = aPlay;
+    }
+
+    // 공연 type별 요금계산
+    get amount() {
+        let result = 0;
+        switch (this.play.type) { // aPlay.type -> this.play.type
+            case "tragedy":
+                result = 40000;
+                if (this.performance.audience > 30) { // aPerformance -> this.performance
+                    result += 1000 * (this.performance.audience - 30);
+                }
+                break;
+            case "comedy":
+                result = 30000; // 기본료
+                if (this.performance.audience > 20) { // 20명까진 기본이용
+                    result += 10000 + 500 * (this.performance.audience - 20); // 추가인원
+                }
+                result += 300 * this.performance.audience; // comedy 특별추가요금
+                break;
+            default:
+                throw new Error(`알 수 없는 장르: ${this.play.type}`);
+        }
+        return result;
+    }
+}
+```
+
+- 기존 사용중인 `amountFor(aPerformance)` 에도 신규 생성한 객체를 사용토록 해본다.
+
+```js
+//to be
+function amountFor(aPerformance) {
+    return new PerformanceCaculator(aPerformance, playFor(aPerformance)).amount;
+}
+```
+
+- 컴파일, 테스트, 커밋
+
+- 적립 포인트 계산하는 함수도 같은 절차대로 `PerformanceCaculator` 객체로 뺀다
