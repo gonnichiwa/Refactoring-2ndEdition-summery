@@ -427,7 +427,7 @@ function createPerformanceCaculator(aPerformance, aPlay){ //
 } //
 ```
 
-### `createPerformanceCaculator(aPerformance, aPlay)`에서 조건에 따라 다형성 서브 클래스 생성토록 함.
+### `createPerformanceCaculator(aPerformance, aPlay)`에서 조건에 따라 다형성 서브 클래스 생성토록 함. `aff4867` (24-05-01)
 
 ```js
 // tobe
@@ -484,3 +484,43 @@ class ComedyCaculator extends PerformanceCaculator {
 }
 ```
 
+### 적립포인트 서브클래스에서 계산토록
+
+- 적립포인트 로직 검토 결과, 일부 장르만 약간씩 다를 뿐 대다수의 연극은 관객 수가 30을 넘는지 조사해야 검사해야함.
+- 일반적인 경우는 슈퍼클래스에 남겨두고, 장르마다 달라지는 부분은 필요할 때 오버라이드하게 만들어본다.
+
+```js
+class PerformanceCaculator {
+    ...
+
+    get volumeCredits() {
+        return Math.max(this.performance.audience - 30, 0);
+    }
+}
+```
+
+```js
+class ComedyCaculator extends PerformanceCaculator {
+    // override 됨
+    get amount() {
+        ...
+    }
+
+    get volumeCredits() {
+        return super.volumeCredits + Math.floor(this.performance.audience / 5);
+    }
+}
+```
+
+- 빌드, 테스트, 커밋
+```js
+const result = statement(invoice, plays);
+console.log(result);
+// result
+// 청구 내역 (고객명: BigCo)
+// Hamlet: $650.00 (55석)
+// as-like: $580.00 (35석)
+// athello: $500.00 (40석)
+// 총액: $1,730.00
+// 적립 포인트 : 47점
+```
