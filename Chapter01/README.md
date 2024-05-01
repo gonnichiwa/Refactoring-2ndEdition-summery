@@ -402,8 +402,28 @@ function amountFor(aPerformance) {
 
 ### 적립 포인트 계산하는 함수도 같은 절차대로 `PerformanceCaculator` 객체로 뺀다 `16c0ec3` (24-05-01)
 
-- 잘 작동되면 코드 정리
+- 잘 작동되면 코드 정리 `d9bf95d` (24-05-01)
 
-- 
+<br/>
 
 ### 공연료 계산기를 다형성 버전으로 만들기
+
+- js에서는 생성자가 서브클래스의 인스턴스를 반환할 수 없으므로.
+- 생성자를 팩터리 함수로 바꾸기(ch11)를 적용한다.
+
+```js
+// tobe
+function enrichPerformance(aPerformance){
+    const caculator = createPerformanceCaculator(aPerformance, playFor(aPerformance)); //
+    const result = Object.assign({}, aPerformance);
+    result.play = playFor(result);
+    result.amount = caculator.amount;
+    result.volumeCredits = caculator.volumeCredits;
+    return result;
+}
+
+function createPerformanceCaculator(aPerformance, aPlay){ //
+    return new PerformanceCaculator(aPerformance, aPlay); // 
+} //
+```
+

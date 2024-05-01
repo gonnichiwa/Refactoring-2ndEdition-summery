@@ -44,12 +44,16 @@ export default function createStatementData(invoice, plays){
     return result;
 
     function enrichPerformance(aPerformance){
-        const caculator = new PerformanceCaculator(aPerformance, playFor(aPerformance));
+        const caculator = createPerformanceCaculator(aPerformance, playFor(aPerformance));
         const result = Object.assign({}, aPerformance);
         result.play = playFor(result);
         result.amount = caculator.amount;
         result.volumeCredits = caculator.volumeCredits;
         return result;
+    }
+
+    function createPerformanceCaculator(aPerformance, aPlay){
+        return new PerformanceCaculator(aPerformance, aPlay);
     }
     
     // 공연(performance) 제목(playID) 에 해당하는 공연정보(play) 를 가져옴
