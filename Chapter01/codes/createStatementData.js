@@ -52,7 +52,7 @@ export default function createStatementData(invoice, plays){
     function enrichPerformance(aPerformance){
         const caculator = createPerformanceCaculator(aPerformance, playFor(aPerformance));
         const result = Object.assign({}, aPerformance);
-        result.play = playFor(result);
+        result.play = caculator.play;
         result.amount = caculator.amount;
         result.volumeCredits = caculator.volumeCredits;
         return result;
