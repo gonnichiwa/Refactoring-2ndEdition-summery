@@ -18,19 +18,37 @@ added 72 packages, and audited 73 packages in 994ms
 found 0 vulnerabilities
 ```
 
+- package.json 에서 `type: module` 확인
+
+```js
+{
+  "devDependencies": {
+    "mocha": "^10.4.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "type": "module"
+}
+```
+
+
+
 - run test
 
 ```sh
 $ npm test
-Debugger attached.
 
 > test
 > mocha
 
-Debugger attached.
-
-  App test!
+  app.spec.js
     ✔ sayHello should return hello
 
-  1 passing (5ms)
+  sample.spec.js
+    ✔ shortfall
+
+
+  2 passing (5ms)
 ```
+

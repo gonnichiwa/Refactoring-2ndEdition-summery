@@ -1,6 +1,6 @@
-const sayHello = require('../source/app').sayHello;
+import sayHello from "../source/app.js";
 
-describe('App test!', function () {
+describe('app.spec.js', function () {
     it('sayHello should return hello', function (done) {
       if (sayHello() === 'hello') {
         done();
