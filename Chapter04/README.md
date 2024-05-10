@@ -23,6 +23,7 @@ found 0 vulnerabilities
 ```js
 {
   "devDependencies": {
+    "chai": "^5.1.0",
     "mocha": "^10.4.0"
   },
   "scripts": {
@@ -31,7 +32,6 @@ found 0 vulnerabilities
   "type": "module"
 }
 ```
-
 
 
 - run test
@@ -45,10 +45,12 @@ $ npm test
   app.spec.js
     ✔ sayHello should return hello
 
-  sample.spec.js
-    ✔ shortfall
+  sample.spec.js - Province
+    ✔ shortfall - using assert
+    ✔ shortfall - using chai
 
-
-  2 passing (5ms)
+  3 passing (5ms)
 ```
+
+<br/>
 
