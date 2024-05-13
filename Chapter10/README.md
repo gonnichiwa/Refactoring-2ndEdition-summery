@@ -439,12 +439,9 @@ class Rating {
     get value(){
         // 수익
         const vpf = this.voyageProfitFactor;
-        console.log('vpf:', vpf);
         // 위험
         const vr = this.voyageRisk;
-        console.log('vr:', vr);
         const chr = this.captainHistoryRisk;
-        console.log('chr:', chr);
         // 계산과 결과등급 return
         if (vpf * 3 > (vr + chr * 2)) return "A";
         else return "B";
