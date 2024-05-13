@@ -2,7 +2,7 @@ import * as sample from '../source/chapter10-4.js';
 // import assert from 'assert';
 import {expect} from 'chai';
 
-describe('sample.spec.js', function() {
+describe('chapter10-4.spec.js', function() {
     let data;
     beforeEach(function() {
         // given
