@@ -1,6 +1,6 @@
 
 export function rating(voyage, history) { // 투자 등급
-    return new Rating(voyage, history).value;
+    return new Rating(voyage, history);
 }
 
 class Rating {
@@ -32,11 +32,11 @@ class Rating {
         let result = 1;
         if(this.history.length < 5) result += 4;
         result += this.history.filter(v => v.profit < 0).length;
-        if(this.voyage.zone === "중국" && this.hasChina) result -= 2;
+        if(this.voyage.zone === "중국" && this.hasChinaHistory) result -= 2;
         return Math.max(result, 0); 
     }
     
-    get hasChina(){ // 중국을 경유하는가?
+    get hasChinaHistory(){ // 중국을 경유하는가?
         return this.history.some(v => "중국" === v.zone);
     }
     
@@ -44,7 +44,7 @@ class Rating {
         let result = 2;
         if(this.voyage.zone === "중국") result += 1;
         if(this.voyage.zone === "동인도") result += 1;
-        if(this.voyage.zone === "중국" && this.hasChina) {
+        if(this.voyage.zone === "중국" && this.hasChinaHistory) {
             result += 3;
             if(this.history.length > 10) result += 1;
             if(this.voyage.length > 12) result += 1;

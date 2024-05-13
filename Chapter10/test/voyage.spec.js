@@ -29,10 +29,18 @@ describe('voyage.js', function() {
         // when
         console.log('---resultA---');
         const resultA = sample.rating(voyageA, historyA);
+        console.log('vpf:', resultA.voyageProfitFactor);
+        console.log('vr:', resultA.voyageRisk);
+        console.log('chr:', resultA.captainHistoryRisk);
+        
         console.log('---resultB---');
         const resultB = sample.rating(voyageB, historyB);
+        console.log('vpf:', resultB.voyageProfitFactor);
+        console.log('vr:', resultB.voyageRisk);
+        console.log('chr:', resultB.captainHistoryRisk);
+        
         // then
-        expect(resultA).equal("A");
-        expect(resultB).equal("B");
+        expect(resultA.value).equal("A");
+        expect(resultB.value).equal("B");
     });
 });
