@@ -51,16 +51,27 @@ class Rating {
         let result = 2;
         if(this.voyage.zone === "중국") result += 1;
         if(this.voyage.zone === "동인도") result += 1;
-        result += this.voyageAndHistoryLengthFactor;
+        result += this.addBasicFactor;
+        result += this.voyageLengthFactor;
+        result += this.historyLengthFactor;
         
         return result;
     }
 
-    get voyageAndHistoryLengthFactor(){
+    get addBasicFactor(){
+        return 0;
+    }
+
+    get voyageLengthFactor(){
         let result = 0;
-        if(this.history.length > 8) result += 1;
+        // if(this.history.length > 8) result += 1;
         if(this.voyage.length > 14) result -= 1;
         return result;
+    }
+
+    get historyLengthFactor(){
+        let result = 0;
+        return this.history.length > 8 ? result += 1 : result;
     }
 }
 
@@ -70,13 +81,22 @@ class ExperiencedChinaRating extends Rating {
         return super.captainHistoryRisk - 2;
     }
 
-    get voyageAndHistoryLengthFactor() {
+    get addBasicFactor(){
+        return 3;
+    }
+
+    get voyageLengthFactor() {
         let result = 0;
-        result += 3;
-        if(this.history.length > 10) result += 1;
+        // result += 3;
+        // if(this.history.length > 10) result += 1;
         if(this.voyage.length > 12) result += 1;
         if(this.voyage.length > 18) result -= 1;
         return result;
+    }
+
+    get historyLengthFactor(){
+        let result = 0;
+        return this.history.length > 10 ? result += 1 : result;
     }
 }
 

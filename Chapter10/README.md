@@ -723,3 +723,59 @@ chr: 6
   4 passing (9ms)
 ```
 
+### `And` 이름 붙은 함수의 분리
+
+- `voyageAndHistoryLengthFactor`이름의 함수를 아래와 같이 분리하여 슈퍼&서브클래스에 오버라이드하여 구현함.
+
+```js
+class Rating {
+... 
+    get voyageProfitFactor() { // 수익 요인
+        let result = 2;
+        if(this.voyage.zone === "중국") result += 1;
+        if(this.voyage.zone === "동인도") result += 1;
+        result += this.addBasicFactor;  // 중국만 +3 하므로 특수 조건으로 추가함.
+        result += this.voyageLengthFactor; // voyageAndHistoryLengthFactor 분리
+        result += this.historyLengthFactor; // voyageAndHistoryLengthFactor 분리
+        
+        return result;
+    }
+
+    get addBasicFactor(){
+        return 0;
+    }
+
+    get voyageLengthFactor(){
+        let result = 0;
+        // if(this.history.length > 8) result += 1;
+        if(this.voyage.length > 14) result -= 1;
+        return result;
+    }
+
+    get historyLengthFactor(){
+        let result = 0;
+        return this.history.length > 8 ? result += 1 : result;
+    }
+}
+
+class ExperiencedChinaRating extends Rating {
+...
+    get addBasicFactor() {
+        return 3;
+    }
+
+    get voyageLengthFactor() { // voyageAndHistoryLengthFactor 분리 (override)
+        let result = 0;
+        // result += 3;
+        // if(this.history.length > 10) result += 1;
+        if(this.voyage.length > 12) result += 1;
+        if(this.voyage.length > 18) result -= 1;
+        return result;
+    }
+
+    get historyLengthFactor(){ // voyageAndHistoryLengthFactor 분리 (override)
+        let result = 0;
+        return this.history.length > 10 ? result += 1 : result;
+    }
+}
+```
