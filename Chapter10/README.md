@@ -17,12 +17,12 @@
 - 복잡한 조건부 로직은 다형성이 막강한 도구
 
 
-### source
+### source (source/chapter10-4.js)
 ---
 <br/>
 
 ```js
-
+// chapter10-4.js
 export function plumages(birds) {
     return new Map(birds.map(b => [b.name, plumage(b)]));
 }
@@ -58,7 +58,7 @@ function airSpeedVelocity(bird){ // 비행 속도
 }
 ```
 
-### tests
+### tests (/test/chapter10-4.spec.js)
 
 ---
 <br/>
@@ -120,3 +120,117 @@ PS C:..\Chapter10> npm run test
     ✔ plumages name and value check
     ✔ speeds
 ```
+
+### 조건문 메소드 객체화
+
+```js
+// source/chapter10-4.js
+function plumage(bird) { // 깃털 상태
+    return new Bird(bird).plumage;
+}
+
+function airSpeedVelocity(bird){ // 비행 속도
+    return new Bird(bird).airSpeedVelocity;
+}
+...
+
+class Bird {
+    constructor(bird){
+        Object.assign(this, bird);
+    }
+
+    get plumage() { // 깃털 상태
+        switch(this.type) {
+            case '유럽제비':
+                return '보통이다';
+            case '아프리카제비':
+                return (this.numberOfCoconuts > 2) ? "지쳤다" : "보통이다";
+            case '노르웨이파랑앵무':
+                return (this.voltage > 100) ? '그을렸다': '예쁘다';
+            default:
+                return '알수없다';
+        }
+    }
+    
+    get airSpeedVelocity(){ // 비행 속도
+        ...
+    }
+}
+```
+
+- 컴파일, 테스트, 커밋
+
+
+### 팩토리 메소드생성, 조건에 따라 서브클래스 인스턴스 쓰도록
+
+```js
+/* source/chapter10-4.js */
+function plumage(bird) { // 깃털 상태
+    return createBird(bird).plumage;
+}
+
+function airSpeedVelocity(bird){ // 비행 속도
+    return createBird(bird).airSpeedVelocity;
+}
+...
+function createBird(bird) { // 인스턴스 생성 팩토리
+    switch(bird.type) {
+        case '유럽제비':
+            return new EuropeanSwallow(bird);
+        case '아프리카제비':
+            return new AfricanSwallow(bird);
+        case '노르웨이파랑앵무':
+            return new NorwegianBlueParrot(bird);
+        default:
+            return new Bird(bird); 
+    }
+}
+
+class Bird {
+    constructor(bird) {
+        Object.assign(this, bird);
+    }
+
+    get plumage() { // 깃털 상태
+        return 'unknown bird';
+    }
+    
+    get airSpeedVelocity() { // 비행 속도
+        return null;
+    }
+}
+
+class EuropeanSwallow extends Bird { // 유럽제비
+    get plumage() { // 깃털 상태
+        return '보통임';
+    }
+    
+    get airSpeedVelocity() { // 비행 속도
+        return 35;
+    }
+}
+
+class AfricanSwallow extends Bird {
+    get plumage() { // 깃털 상태
+        return (this.numberOfCoconuts > 2) ? "지쳤다" : "보통이다";
+    }
+    
+    get airSpeedVelocity() { // 비행 속도
+        return 40 - (2 * this.numberOfCoconuts);
+    }
+}
+
+class NorwegianBlueParrot extends Bird {
+    get plumage() { // 깃털 상태
+        return (this.voltage > 100) ? '그을렸다': '예쁘다';
+    }
+    
+    get airSpeedVelocity() { // 비행 속도
+        return (this.isNailed) ? 0 : 10 + (this.voltage / 10);
+    }
+}
+```
+
+- 컴파일, 테스트, 커밋
+
+### 
