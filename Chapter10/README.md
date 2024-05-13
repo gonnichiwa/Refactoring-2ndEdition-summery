@@ -368,3 +368,132 @@ PS C:...\Chapter10> npm run test
   4 passing (6ms)
 ```
 
+### 세부 계산을 수행하는 함수들을 먼저 클래스 객체로 옮김 (source/voyage.js)
+
+- 외부에서 호출하는 `rating(voyage, history)` 가 `Rating` 객체 생성하도록
++ `function` 처리하는 `voyageRisk`, `captainHistoryRisk`, `hasChina`, `voyageProfitFactor` 들을 `Rating` 클래스로 옮김.
+  - `Rating`에서 새로 만든 value 기능으로 투자등급 나오도록
+  - 세부 계산 수행 함수들이 `Rating` 객체 내부에서 수행되도록
+
+```js
+// export function rating(voyage, history) { // 투자 등급
+//     // 수익
+//     const vpf = voyageProfitFactor(voyage, history);
+//     // 위험
+//     const vr = voyageRisk(voyage);
+//     const chr = captainHistoryRisk(voyage, history);
+//     // 계산과 결과등급 return
+//     if (vpf * 3 > (vr + chr * 2)) return "A";
+//     else return "B";
+// }
+
+export function rating(voyage, history){
+    return new Rating(voyage, history).value;
+}
+
+
+/* 삭제 */
+// function voyageRisk(voyage) { // 항해 경로 위험요소
+//     let result = 1;
+//     if(voyage.length > 4) result += 2;
+//     if(voyage.length > 8) result += voyage.length - 8;
+//     if(["중국","동인도"].includes(voyage.zone)) result += 4;
+//     return Math.max(result, 0);
+// }
+
+// function captainHistoryRisk(voyage, history) { // 선장의 항해 이력 위험요소
+//     let result = 1;
+//     if(history.length < 5) result += 4;
+//     result += history.filter(v => v.profit < 0).length;
+//     if(voyage.zone === "중국" && hasChina(history)) result -= 2;
+//     return Math.max(result, 0); 
+// }
+
+// function hasChina(history){ // 중국을 경유하는가?
+//     return history.some(v => "중국" === v.zone);
+// }
+
+// function voyageProfitFactor(voyage, history) { // 수익 요인
+//     let result = 2;
+//     if(voyage.zone === "중국") result += 1;
+//     if(voyage.zone === "동인도") result += 1;
+//     if(voyage.zone === "중국" && hasChina(history)) {
+//         result += 3;
+//         if(history.length > 10) result += 1;
+//         if(voyage.length > 12) result += 1;
+//         if(voyage.length > 18) result -= 1;
+//     }
+//     else {
+//         if(history.length > 8) result += 1;
+//         if(voyage.length > 14) result -= 1;
+//     }
+//     return result;
+// }
+
+class Rating {
+    constructor(voyage, history){
+        this.voyage = voyage;
+        this.history = history;
+    }
+
+    get value(){
+        // 수익
+        const vpf = this.voyageProfitFactor;
+        // 위험
+        const vr = this.voyageRisk;
+        const chr = this.captainHistoryRisk;
+        // 계산과 결과등급 return
+        if (vpf * 3 > (vr + chr * 2)) return "A";
+        else return "B";
+    }
+
+    get voyageRisk() { // 항해 경로 위험요소
+        let result = 1;
+        if(this.voyage.length > 4) result += 2;
+        if(this.voyage.length > 8) result += this.voyage.length - 8;
+        if(["중국","동인도"].includes(this.voyage.zone)) result += 4;
+        return Math.max(result, 0);
+    }
+    
+    get captainHistoryRisk() { // 선장의 항해 이력 위험요소
+        let result = 1;
+        if(this.history.length < 5) result += 4;
+        result += this.history.filter(v => v.profit < 0).length;
+        if(this.voyage.zone === "중국" && hasChina(this.history)) result -= 2;
+        return Math.max(result, 0); 
+    }
+    
+    hasChina(history){ // 중국을 경유하는가?
+        return history.some(v => "중국" === v.zone);
+    }
+    
+    get voyageProfitFactor() { // 수익 요인
+        let result = 2;
+        if(this.voyage.zone === "중국") result += 1;
+        if(this.voyage.zone === "동인도") result += 1;
+        if(this.voyage.zone === "중국" && hasChina(this.history)) {
+            result += 3;
+            if(this.history.length > 10) result += 1;
+            if(this.voyage.length > 12) result += 1;
+            if(this.voyage.length > 18) result -= 1;
+        }
+        else {
+            if(this.history.length > 8) result += 1;
+            if(this.voyage.length > 14) result -= 1;
+        }
+        return result;
+    }
+}
+```
+
+- 컴파일, 테스트, 커밋
+
+```js
+PS C:...\Chapter10> npm run test
+...
+  voyage.js
+    ✔ rating result
+
+  4 passing (6ms)
+```
+
