@@ -17,7 +17,7 @@
 - 복잡한 조건부 로직은 다형성이 막강한 도구
 
 
-### source (source/chapter10-4.js)
+### source (source/bird.js)
 ---
 <br/>
 
@@ -58,17 +58,17 @@ function airSpeedVelocity(bird){ // 비행 속도
 }
 ```
 
-### tests (/test/chapter10-4.spec.js)
+### tests (/test/bird.spec.js)
 
 ---
 <br/>
 
 ```js
-import * as sample from '../source/chapter10-4.js';
+import * as sample from '../source/bird.js';
 // import assert from 'assert';
 import {expect} from 'chai';
 
-describe('chapter10-4.spec.js', function() {
+describe('bird.spec.js', function() {
     let data;
     beforeEach(function() {
         // given
@@ -115,7 +115,7 @@ PS C:..\Chapter10> npm run test
 > test
 > mocha
 
-  chapter10-4.spec.js
+  bird.spec.js
     ✔ plumages count
     ✔ plumages name and value check
     ✔ speeds
@@ -124,7 +124,7 @@ PS C:..\Chapter10> npm run test
 ### 조건문 메소드 객체화
 
 ```js
-// source/chapter10-4.js
+/* source/bird.js */
 function plumage(bird) { // 깃털 상태
     return new Bird(bird).plumage;
 }
@@ -164,7 +164,7 @@ class Bird {
 ### 팩토리 메소드생성, 조건에 따라 서브클래스 인스턴스 쓰도록
 
 ```js
-/* source/chapter10-4.js */
+/* source/bird.js */
 function plumage(bird) { // 깃털 상태
     return createBird(bird).plumage;
 }
@@ -236,6 +236,7 @@ class NorwegianBlueParrot extends Bird {
 ### map() 호출 메소드 인라인 처리
 
 ```js
+/* source/bird.js */
 export function plumages(birds) {
     return new Map(birds
                     .map(b => createBird(b))
