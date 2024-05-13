@@ -605,3 +605,121 @@ chr: 6
   4 passing (9ms)
 ```
 
+- 아래 함수의 분리는 좀 복잡함
+- 단순 변형동작을 제거할 수 없음
+
+```js
+// source/voyage.js
+class Rating {
+...
+    get voyageProfitFactor() { // 수익 요인
+        let result = 2;
+        if(this.voyage.zone === "중국") result += 1;
+        if(this.voyage.zone === "동인도") result += 1;
+        if(this.voyage.zone === "중국" && this.hasChinaHistory) {
+            result += 3;
+            if(this.history.length > 10) result += 1;
+            if(this.voyage.length > 12) result += 1;
+            if(this.voyage.length > 18) result -= 1;
+        }
+        else {
+            if(this.history.length > 8) result += 1;
+            if(this.voyage.length > 14) result -= 1;
+        }
+        return result;
+    }
+...
+}
+```
+
+- 이럴땐 일단 함수 추출
+
+```js
+class Rating {
+...
+    get voyageProfitFactor() { // 수익 요인
+        let result = 2;
+        if(this.voyage.zone === "중국") result += 1;
+        if(this.voyage.zone === "동인도") result += 1;
+        result += this.voyageAndHistoryLengthFactor;
+        
+        return result;
+    }
+
+    get voyageAndHistoryLengthFactor(){
+        let result = 0;
+        if(this.voyage.zone === "중국" && this.hasChinaHistory) {
+            result += 3;
+            if(this.history.length > 10) result += 1;
+            if(this.voyage.length > 12) result += 1;
+            if(this.voyage.length > 18) result -= 1;
+        }
+        else {
+            if(this.history.length > 8) result += 1;
+            if(this.voyage.length > 14) result -= 1;
+        }
+        return result;
+    }
+...
+}
+```
+
+- 함수이름에 `And` 붙는게 별로다만 (이해하기 어렵다) 좀더 진행하면서 고치는걸로
+- 분리는 아래 소스와 주석 참조
+
+```js
+class Rating {
+...
+    // 수익 요인 : 일반적으로 계산 + 
+    get voyageProfitFactor() { // 수익 요인
+        let result = 2;
+        if(this.voyage.zone === "중국") result += 1;
+        if(this.voyage.zone === "동인도") result += 1;
+        result += this.voyageAndHistoryLengthFactor; // 기존 if로 분기된 슈퍼 | 서브 클래스 계산로직
+        
+        return result;
+    }
+
+    // 슈퍼클래스 : 일반동작으로 분리
+    get voyageAndHistoryLengthFactor(){
+        let result = 0;
+        if(this.history.length > 8) result += 1;
+        if(this.voyage.length > 14) result -= 1;
+        return result;
+    }
+}
+
+class ExperiencedChinaRating extends Rating {
+...
+    // 팩토리 생성 조건에 따라 수행되는 로직
+    get voyageAndHistoryLengthFactor() {
+        let result = 0;
+        result += 3;
+        if(this.history.length > 10) result += 1;
+        if(this.voyage.length > 12) result += 1;
+        if(this.voyage.length > 18) result -= 1;
+        return result;
+    }
+}
+```
+
+- 컴파일, 테스트, 커밋
+
+```js
+PS C:\...Chapter10> npm run test
+
+...
+  voyage.js
+---resultA---
+vpf: 6
+vr: 5
+chr: 4
+---resultB---
+vpf: 2
+vr: 5
+chr: 6
+    ✔ rating result
+
+  4 passing (9ms)
+```
+
