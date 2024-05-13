@@ -390,12 +390,24 @@ PS C:...\Chapter10> npm run test
   4 passing (6ms)
 ```
 
+<br/>
+
 ### 세부 계산을 수행하는 함수들을 먼저 클래스 객체로 옮김 (source/voyage.js)
+---
+
+- 기본 동작을 담당하는 클래스 `Rating`을 만들고 변형 동작은 서브 클래스가 담당하도록 할것임.
+ - 기본동작은 슈퍼클래스 `Rating`이 담당한다.
+ + 서브클래스는 조건에 따른 부가동작을 더해야 할때 담당한다.
+   - super.기본동작 메소드 호출 + 부가동작의 방식
+
+<br/>
 
 - 외부에서 호출하는 `rating(voyage, history)` 가 `Rating` 객체 생성하도록
 + `function` 처리하는 `voyageRisk`, `captainHistoryRisk`, `hasChina`, `voyageProfitFactor` 들을 `Rating` 클래스로 옮김.
   - `Rating`에서 새로 만든 value 기능으로 투자등급 나오도록
   - 세부 계산 수행 함수들이 `Rating` 객체 내부에서 수행되도록
+
+
 
 ```js
 // export function rating(voyage, history) { // 투자 등급
@@ -517,5 +529,79 @@ PS C:...\Chapter10> npm run test
     ✔ rating result
 
   4 passing (6ms)
+```
+
+### 부가동작을 수행하도록 조건에 따라 서브클래스가 수행하도록 함 (source/voyage.js)
+
+> - 위 소스 분석상 변형 동작을 나누는 기준은 아래와 같음.
+> - `voyage`나 `history`에 `중국` 관련 데이터 발견시. `동인도` 일 때도 보이지만 `중국`일때 처리로직이 각 내부함수마다 자주 보이므로 이것부터 처리함.
+
+<br/>
+
+- `Rating` 객체생성 팩토리 메소드 생성함.
+
+```js
+// source/voyage.js
+export function rating(voyage, history) { // 투자 등급
+    return createRating(voyage, history);
+}
+
+function createRating(voyage, history) {
+    if(voyage.zone === "중국" && history.some(v => "중국" === v.zone)) {
+        return new ExperiencedChinaRating(voyage, history);
+    } else {
+        return new Rating(voyage, history);
+    }
+}
+```
+
+- 조건에 해당하는 서브클래스 `ExperiencedChinaRating` 생성함.
+```js
+// source/voyage.js
+class ExperiencedChinaRating extends Rating {
+}
+```
+
+- 항해 이력 위험요소의 계산 조건상 `중국` 포함 여부를 서브클래스로 분리함.
+
+```js
+// source/voyage.js
+get captainHistoryRisk() { // 선장의 항해 이력 위험요소
+    let result = 1;
+    if(this.history.length < 5) result += 4;
+    result += this.history.filter(v => v.profit < 0).length;
+    // if(this.voyage.zone === "중국" && this.hasChinaHistory) result -= 2; 서브클래스에서 담당, 이 라인 삭제
+    return Math.max(result, 0); 
+}
+```
+
+```js
+// source/voyage.js
+class ExperiencedChinaRating extends Rating {
+    get captainHistoryRisk() {
+        return super.captainHistoryRisk - 2;
+    }
+}
+```
+
+- 컴파일, 테스트, 커밋
+- 세부조건에 해당하는 값이 리팩토링중 변형될 수 있으므로 테스트를 보강하고 세부 값에 대한 로그를 출력하도록 함.
+
+```js
+PS C:\...Chapter10> npm run test
+
+...
+  voyage.js
+---resultA---
+vpf: 6
+vr: 5
+chr: 4
+---resultB---
+vpf: 2
+vr: 5
+chr: 6
+    ✔ rating result
+
+  4 passing (9ms)
 ```
 

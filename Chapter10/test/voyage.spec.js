@@ -38,9 +38,17 @@ describe('voyage.js', function() {
         console.log('vpf:', resultB.voyageProfitFactor);
         console.log('vr:', resultB.voyageRisk);
         console.log('chr:', resultB.captainHistoryRisk);
-        
+
         // then
         expect(resultA.value).equal("A");
         expect(resultB.value).equal("B");
+        // ---resultA---
+        // vpf: 6
+        // vr: 5
+        // chr: 4
+        // ---resultB---
+        // vpf: 2
+        // vr: 5
+        // chr: 6
     });
 });

@@ -1,6 +1,14 @@
 
 export function rating(voyage, history) { // 투자 등급
-    return new Rating(voyage, history);
+    return createRating(voyage, history);
+}
+
+function createRating(voyage, history) {
+    if(voyage.zone === "중국" && history.some(v => "중국" === v.zone)) {
+        return new ExperiencedChinaRating(voyage, history);
+    } else {
+        return new Rating(voyage, history);
+    }
 }
 
 class Rating {
@@ -32,7 +40,6 @@ class Rating {
         let result = 1;
         if(this.history.length < 5) result += 4;
         result += this.history.filter(v => v.profit < 0).length;
-        if(this.voyage.zone === "중국" && this.hasChinaHistory) result -= 2;
         return Math.max(result, 0); 
     }
     
@@ -57,3 +64,11 @@ class Rating {
         return result;
     }
 }
+
+class ExperiencedChinaRating extends Rating {
+    get captainHistoryRisk() {
+        // if(this.voyage.zone === "중국" && this.hasChinaHistory) result -= 2;
+        return super.captainHistoryRisk - 2;
+    }
+}
+
