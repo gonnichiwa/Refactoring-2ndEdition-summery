@@ -43,10 +43,6 @@ class Rating {
         return Math.max(result, 0); 
     }
     
-    get hasChinaHistory(){ // 중국을 경유하는가?
-        return this.history.some(v => "중국" === v.zone);
-    }
-    
     get voyageProfitFactor() { // 수익 요인
         let result = 2;
         if(this.voyage.zone === "중국") result += 1;
@@ -64,7 +60,6 @@ class Rating {
 
     get voyageLengthFactor(){
         let result = 0;
-        // if(this.history.length > 8) result += 1;
         if(this.voyage.length > 14) result -= 1;
         return result;
     }
@@ -77,7 +72,6 @@ class Rating {
 
 class ExperiencedChinaRating extends Rating {
     get captainHistoryRisk() {
-        // if(this.voyage.zone === "중국" && this.hasChinaHistory) result -= 2;
         return super.captainHistoryRisk - 2;
     }
 
@@ -87,8 +81,6 @@ class ExperiencedChinaRating extends Rating {
 
     get voyageLengthFactor() {
         let result = 0;
-        // result += 3;
-        // if(this.history.length > 10) result += 1;
         if(this.voyage.length > 12) result += 1;
         if(this.voyage.length > 18) result -= 1;
         return result;
