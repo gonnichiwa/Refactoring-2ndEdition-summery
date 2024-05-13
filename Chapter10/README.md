@@ -1,5 +1,5 @@
 
-# Chapter 10
+# Chapter 10 조건부 로직 간소화
 
 ## 10.4 조건부 로직을 다형성으로 바꾸기
 
@@ -18,6 +18,8 @@
 
 
 ### source
+---
+<br/>
 
 ```js
 
@@ -58,12 +60,15 @@ function airSpeedVelocity(bird){ // 비행 속도
 
 ### tests
 
+---
+<br/>
+
 ```js
-import * as sample from '../source/sample.js';
+import * as sample from '../source/chapter10-4.js';
 // import assert from 'assert';
 import {expect} from 'chai';
 
-describe('sample.spec.js', function() {
+describe('chapter10-4.spec.js', function() {
     let data;
     beforeEach(function() {
         // given
@@ -102,4 +107,16 @@ describe('sample.spec.js', function() {
         expect(bSpeeds.get('chambird')).equal(null);
     });
 });
+```
+
+```sh
+PS C:..\Chapter10> npm run test
+
+> test
+> mocha
+
+  chapter10-4.spec.js
+    ✔ plumages count
+    ✔ plumages name and value check
+    ✔ speeds
 ```
