@@ -1,18 +1,17 @@
 
 export function plumages(birds) {
-    return new Map(birds.map(b => [b.name, plumage(b)]));
+    return new Map(birds
+                    .map(b => createBird(b))
+                    .map(bird => [bird.name, bird.plumage])
+    );
 }
 
 export function speeds(birds) {
-    return new Map(birds.map(b => [b.name, airSpeedVelocity(b)]));
-}
-
-function plumage(bird) { // 깃털 상태
-    return createBird(bird).plumage;
-}
-
-function airSpeedVelocity(bird){ // 비행 속도
-    return createBird(bird).airSpeedVelocity;
+    return new Map(birds
+                    .map(b => createBird(b))
+                    .map(bird => [bird.name, bird.airSpeedVelocity])
+    
+    );
 }
 
 function createBird(bird) { // 인스턴스 생성 팩토리

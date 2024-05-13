@@ -25,12 +25,13 @@ describe('chapter10-4.spec.js', function() {
         // then
         expect(plumages.size).equal(data.length);
     });
-    it('plumages name and value check', function() {
+    it('plumages name & value check', function() {
         // when
         const plumages = sample.plumages(data);
         // then
         expect(plumages.get('africajebiname')).equal('지쳤다');
         expect(plumages.get('norwayparangname')).equal('그을렸다');
+        expect(plumages.get('chambird')).equal('unknown bird');
     });
     it('speeds', function() {
         // when

@@ -233,4 +233,32 @@ class NorwegianBlueParrot extends Bird {
 
 - 컴파일, 테스트, 커밋
 
-### 
+### map() 호출 메소드 인라인 처리
+
+```js
+export function plumages(birds) {
+    return new Map(birds
+                    .map(b => createBird(b))
+                    .map(bird => [bird.name, bird.plumage])
+    );
+}
+
+export function speeds(birds) {
+    return new Map(birds
+                    .map(b => createBird(b))
+                    .map(bird => [bird.name, bird.airSpeedVelocity])
+    
+    );
+}
+
+// 삭제
+// function plumage(bird) {
+//     return createBird(bird).plumage;
+// }
+
+// 삭제
+// function airSpeedVelocity(bird) {
+//     return createBird(bird).airSpeedVelocity;
+// }
+```
+
