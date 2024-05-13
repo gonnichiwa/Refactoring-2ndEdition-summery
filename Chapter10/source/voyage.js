@@ -32,19 +32,19 @@ class Rating {
         let result = 1;
         if(this.history.length < 5) result += 4;
         result += this.history.filter(v => v.profit < 0).length;
-        if(this.voyage.zone === "중국" && hasChina(this.history)) result -= 2;
+        if(this.voyage.zone === "중국" && this.hasChina) result -= 2;
         return Math.max(result, 0); 
     }
     
-    hasChina(history){ // 중국을 경유하는가?
-        return history.some(v => "중국" === v.zone);
+    get hasChina(){ // 중국을 경유하는가?
+        return this.history.some(v => "중국" === v.zone);
     }
     
     get voyageProfitFactor() { // 수익 요인
         let result = 2;
         if(this.voyage.zone === "중국") result += 1;
         if(this.voyage.zone === "동인도") result += 1;
-        if(this.voyage.zone === "중국" && hasChina(this.history)) {
+        if(this.voyage.zone === "중국" && this.hasChina) {
             result += 3;
             if(this.history.length > 10) result += 1;
             if(this.voyage.length > 12) result += 1;
