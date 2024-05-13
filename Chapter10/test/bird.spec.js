@@ -2,7 +2,7 @@ import * as sample from '../source/bird.js';
 // import assert from 'assert';
 import {expect} from 'chai';
 
-describe('chapter10-4.spec.js', function() {
+describe('bird.spec.js', function() {
     let data;
     beforeEach(function() {
         // given
