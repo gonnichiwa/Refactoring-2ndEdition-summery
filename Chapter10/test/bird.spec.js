@@ -1,4 +1,4 @@
-import * as sample from '../source/bird.js';
+import * as bird from '../source/bird.js';
 // import assert from 'assert';
 import {expect} from 'chai';
 
@@ -21,13 +21,13 @@ describe('bird.spec.js', function() {
     });
     it('plumages count', function() {
         // when
-        const plumages = sample.plumages(data);
+        const plumages = bird.plumages(data);
         // then
         expect(plumages.size).equal(data.length);
     });
     it('plumages name & value check', function() {
         // when
-        const plumages = sample.plumages(data);
+        const plumages = bird.plumages(data);
         // then
         expect(plumages.get('africajebiname')).equal('지쳤다');
         expect(plumages.get('norwayparangname')).equal('그을렸다');
@@ -35,7 +35,7 @@ describe('bird.spec.js', function() {
     });
     it('speeds', function() {
         // when
-        const bSpeeds = sample.speeds(data);
+        const bSpeeds = bird.speeds(data);
         // then
         expect(bSpeeds.get('africajebiname')).equal(32);
         expect(bSpeeds.get('norwayparangname22')).equal(15);

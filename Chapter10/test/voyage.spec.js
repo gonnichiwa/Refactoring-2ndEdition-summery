@@ -1,4 +1,4 @@
-import * as sample from '../source/voyage.js';
+import * as voyage from '../source/voyage.js';
 // import assert from 'assert';
 import {expect} from 'chai';
 
@@ -28,13 +28,13 @@ describe('voyage.js', function() {
     it('rating result', function() {
         // when
         console.log('---resultA---');
-        const resultA = sample.rating(voyageA, historyA);
+        const resultA = voyage.rating(voyageA, historyA);
         console.log('vpf:', resultA.voyageProfitFactor);
         console.log('vr:', resultA.voyageRisk);
         console.log('chr:', resultA.captainHistoryRisk);
         
         console.log('---resultB---');
-        const resultB = sample.rating(voyageB, historyB);
+        const resultB = voyage.rating(voyageB, historyB);
         console.log('vpf:', resultB.voyageProfitFactor);
         console.log('vr:', resultB.voyageRisk);
         console.log('chr:', resultB.captainHistoryRisk);
